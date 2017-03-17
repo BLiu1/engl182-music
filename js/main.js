@@ -5,39 +5,180 @@
 	(function(){var lastTime=0;var vendors=["webkit","moz","ms","o"];for(var x=0;x<vendors.length&&!window.requestAnimationFrame;++x){window.requestAnimationFrame=window[vendors[x]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[vendors[x]+"CancelAnimationFrame"]||window[vendors[x]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame)window.requestAnimationFrame=function(callback,element){var currTime=(new Date).getTime();var timeToCall=Math.max(0,16-(currTime-lastTime));var id=window.setTimeout(function(){callback(currTime+timeToCall)},timeToCall);lastTime=currTime+timeToCall;return id};if(!window.cancelAnimationFrame)window.cancelAnimationFrame=function(id){clearTimeout(id)}})();
 	var addEvent = function(obj, evt, fnc) {/*https://gist.github.com/eduardocereto/955642*/if(obj.addEventListener){obj.addEventListener(evt,fnc,false);return true;}else if(obj.attachEvent){return obj.attachEvent('on'+evt,fnc);}else{evt='on'+evt;if(typeof obj[evt]==='function'){fnc=(function(f1,f2){return function(){f1.apply(this,arguments);f2.apply(this,arguments);}})(obj[evt],fnc);}obj[evt]=fnc;return true;}return false;};
 
-	var videos = [
-		document.getElementById("drums"),
-		document.getElementById("melodies"),
-		document.getElementById("bass"),
-		document.getElementById("chords1"),
-		document.getElementById("chords2"),
-		document.getElementById("fx")
-	];
-
+	var videos = getArrayOfVideos();
 	var videoWrappers = document.getElementsByClassName('vid-wrapper');
-	for (var i = 0; i < videoWrappers.length; i++) {
-		addEvent(videoWrappers[i], "click", function () {
-			// only way I could get the video object
-			var vid = this.children[0];
-			// toggles whether it's muted
-			vid.muted = !vid.muted;
 
-			// get the cover div
-			var cover = this.children[1];
-			// toggles whether it's on top of the video
-			cover.style.zIndex = (cover.style.zIndex == 2) ? 0 : 2;
-		});
+	//  gives mute/unmute behavior to videoWrappers
+	for (var i = 0; i < videoWrappers.length; i++) {
+		addEvent(videoWrappers[i], "click", toggleSingle);
 	}
 
-	setTimeout(function () {
-		checkLoad(videos);
-	}, 1000);
+	// load the videos
+	checkLoad(videos);
 
+	// make sure the videos stay in sync by adjusting every 100 ms
 	setInterval(function () {
+		// sync second - last video with first video
 		syncVideos(videos[0], videos.slice(1, videos.length));
 	}, 100);
 
+	// manually loops the videos once they have played through
 	addEvent(videos[0], "timeupdate", checkLoop);
+
+	// stops playing when going to YouTube
+	addEvent(document.getElementById('link'), "click", function (e) {
+		togglePlayPause(e, true);
+	});
+
+	// stop focusing once clicked
+	var buttons = document.getElementsByClassName('control');
+	for (var i = 0; i < buttons.length; i++) {
+		addEvent(buttons[i], "click", function () {
+			this.blur();
+		})
+	}
+
+	// toggles playing and pausing all videos
+	addEvent(document.getElementById('togglePlayPause'), "click", togglePlayPause);
+
+	// puts all of the videos at the start
+	addEvent(document.getElementById('restartAll'), "click", restartAll);
+
+	// mutes all of the videos
+	addEvent(document.getElementById('muteAll'), "click", muteAll);
+
+	// unmutes all of the videos
+	addEvent(document.getElementById('unmuteAll'), "click", unmuteAll);
+
+	// toggles all of the videos
+	addEvent(document.getElementById('toggleAll'), "click", toggleAll);
+
+
+
+
+
+
+
+	// returns an array of video DOM objects
+	function getArrayOfVideos() {
+		var videoElements = document.getElementsByClassName('music');
+		return HTMLCollectionToArray(videoElements);
+	}
+
+	// converts an HTMLCollection to an array
+	function HTMLCollectionToArray(collection) {
+		try {
+			return Array.prototype.slice.call(collection);
+		} catch (e) {
+			for(var i = 0, a = []; i < collection.length; i++){
+	        	a.push(collection[i]);
+			}
+			return a;
+		}
+	}
+
+	// toggles a single video between muted and unmuted
+	// called by click eventListener from individual videoWrapper
+	// if an element is passed in, it will use that as the videoWrapper
+	function toggleSingle(e, el) {
+		var self = el || this;
+		// get the video object
+		var vid = self.children[0];
+		// toggles whether it's muted
+		vid.muted = !vid.muted;
+
+		// get the cover div
+		var cover = self.children[1];
+		// toggles whether it's on top of the video
+		cover.style.zIndex = (cover.style.zIndex == 2) ? 0 : 2;
+	}
+
+	// toggles all videos to their opposites (muted to unmuted and vice versa)
+	// called by click eventListener from control button
+	function toggleAll() {
+		var videoWrappers = document.getElementsByClassName('vid-wrapper');
+		for (var i = 0; i < videoWrappers.length; i++) {
+			toggleSingle(undefined, videoWrappers[i]);
+		}
+	}
+
+	// mutes all videos
+	// called by click eventListener from control button
+	function muteAll() {
+		var videoWrappers = document.getElementsByClassName('vid-wrapper');
+		for (var i = 0; i < videoWrappers.length; i++) {
+			// mute video object
+			videoWrappers[i].children[0].muted = true;
+			// put cover div on top
+			videoWrappers[i].children[1].style.zIndex = 2;
+		}
+	}
+
+	// unmutes all videos
+	// called by click eventListener from control button
+	function unmuteAll() {
+		var videoWrappers = document.getElementsByClassName('vid-wrapper');
+		for (var i = 0; i < videoWrappers.length; i++) {
+			// mute video object
+			videoWrappers[i].children[0].muted = false;
+			// put cover div on top
+			videoWrappers[i].children[1].style.zIndex = 0;
+		}
+	}
+
+	// toggles the play state of all videos
+	// called by click eventListener from control button
+	function togglePlayPause(e, pause) {
+		var videoElements = document.getElementsByClassName('music');
+		var isPaused = videoElements[0].paused;
+		var pause = pause || false;
+
+		if (isPaused && !pause) {
+			// play all videos
+			for (var i = 0; i < videoElements.length; i++) {
+				videoElements[i].play();
+			}
+		} else {
+			// paused all videos
+			for (var i = 0; i < videoElements.length; i++) {
+				videoElements[i].pause();
+			}
+		}
+
+		checkPaused();
+	}
+
+	// puts all videos at the start
+	// called by click eventListener from control button
+	function restartAll() {
+		var videoElements = document.getElementsByClassName('music');
+		for (var i = 0; i < videoElements.length; i++) {
+			videoElements[i].currentTime = 0;
+		}
+		checkPaused();
+	}
+
+	// checks if play pause icon should be switched and does so
+	// returns if it is paused
+	function checkPaused() {
+		var isPaused = document.getElementsByClassName('music')[0].paused;
+		var togglePlayPauseButton = document.getElementById('togglePlayPause').children[0];
+		// change icon and alt
+		if (isPaused) {
+			togglePlayPauseButton.src = "img/play.svg";
+			togglePlayPauseButton.alt = "Play";
+		} else {
+			togglePlayPauseButton.src = "img/pause.svg";
+			togglePlayPauseButton.alt = "Pause";
+		}
+	}
+
+
+
+
+
+
+
 
 	// takes array of video objects
 	function checkLoad(videos) {
@@ -53,18 +194,21 @@
 	}
 
 	// takes array of video objects
+	// starts all videos playing
 	function startVideos(videos) {
 		for (var i = 0; i < videos.length; i++) {
 			videos[i].play();
 		}
+		checkPaused();
 	}
 
 	// takes a video object and an array of video objects
 	// syncs the rest of the videos to the first by adjusting playback speeds
 	function syncVideos(_masterPlayer, _slavePlayers) {
-		var adjustmentSensitivity = 5;
-		var slowestPlaybackSpeed = 0.02;
-		var fastestPlaybackSpeed = 50.00;
+		var maxTimeDiff = 5; // seconds
+		var adjustmentSensitivity = 2;
+		var slowestPlaybackSpeed = 0;
+		var fastestPlaybackSpeed = 10.00;
 		// Code adapted from this comment http://disq.us/p/th4uhk
 		//   on https://bocoup.com/blog/html5-video-synchronizing-playback-of-two-videos/
 		// Compensate for discrepency in playback sync by changing the frame rate of the player(s)
@@ -72,10 +216,14 @@
 		// _slavePlayers are all the tracks who will be forced to stay in sync with _masterPlayer
 		for (var i = 0; i < _slavePlayers.length; i++) {
 			var timeDiff = (_masterPlayer.currentTime - _slavePlayers[i].currentTime);
+			// if somehow they get massively separated
+			if (Math.abs(timeDiff) > maxTimeDiff){
+				_slavePlayers[i].currentTime = _masterPlayer.currentTime;
+			}
 			var compensatingFrameRate = (
 					Math.min(
 						Math.max(
-							(timeDiff * adjustmentSensitivity + 1)
+							(timeDiff * adjustmentSensitivity + _masterPlayer.playbackRate)
 							, slowestPlaybackSpeed
 						)
 						, fastestPlaybackSpeed
@@ -103,7 +251,7 @@
 	}*/
 
 	// manually makes all the videos loop in sync
-	// called by eventListener
+	// called by timeupdate eventListener on first video
 	function checkLoop() {
 		// once the first one has reached almost the end,
 		// all of them are reset to the beginning

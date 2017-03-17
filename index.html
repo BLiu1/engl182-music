@@ -22,55 +22,58 @@
     	|  to improve your experience.
     -->
     <div class="content">
-      <div class="vid-wrapper" id="drums-wrapper">
-        <video id="drums" src="video/Drums.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-        <div class="cover">
-          <h2 class="label">Drums</h2>
+      <h1 class="container title">Music Visualization of TheFatRat's &ldquo;Monody&rdquo;</h1>
+      <div class="container music-viz">
+        <div class="vid-wrapper">
+          <video class="music" id="drums" src="video/drums.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Drums</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
+          <video class="music" id="melodies" src="video/melodies.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Melody</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
+          <video class="music" id="bass" src="video/bass.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Bass</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
+          <video class="music" id="chords1" src="video/chords1.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Chords 1</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
+          <video class="music" id="chords2" src="video/chords2.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Chords 2</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
+          <video class="music" id="fx" src="video/fx.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Sound Effects</h2>
+          </div>
         </div>
       </div>
-      <div class="vid-wrapper" id="melodies-wrapper">
-        <video id="melodies" src="video/Melodies.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-        <div class="cover">
-          <h2 class="label">Melody</h2>
-        </div>
+      <div class="container controls">
+        <button class="control" id="restartAll" type="button"><img src="img/restart.svg" alt="Skip to Start" title="Skip to Start"/></button>
+        <button class="control" id="togglePlayPause" type="button"><img src="img/play.svg" alt="Play" title="Play"/></button>
+        <button class="control" id="muteAll" type="button"><img src="img/mute.svg" alt="Mute All" title="Mute All"/></button>
+        <button class="control" id="toggleAll" type="button"><img src="img/toggle.svg" alt="Toggle All" title="Toggle All"/></button>
+        <button class="control" id="unmuteAll" type="button"><img src="img/unmute.svg" alt="Unmute All" title="Unmute All"/></button>
       </div>
-      <div class="vid-wrapper" id="bass-wrapper">
-        <video id="bass" src="video/Bass.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-        <div class="cover">
-          <h2 class="label">Bass</h2>
-        </div>
-      </div>
-      <div class="vid-wrapper" id="chords1-wrapper">
-        <video id="chords1" src="video/Chords 1.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-        <div class="cover">
-          <h2 class="label">Chords 1</h2>
-        </div>
-      </div>
-      <div class="vid-wrapper" id="chords2-wrapper">
-        <video id="chords2" src="video/Chords 2.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-        <div class="cover">
-          <h2 class="label">Chords 2</h2>
-        </div>
-      </div>
-      <div class="vid-wrapper" id="fx-wrapper">
-        <video id="fx" src="video/FX.mp4" type="video/mp4" preload="auto"></video>
-        <div class="cover">
-          <h2 class="label">Sound Effects</h2>
-        </div>
+      <div class="info">
+        <p>Music: <a id="link" href="https://www.youtube.com/watch?v=B7xai5u_tnk" target="_blank">"Monody" by TheFatRat</a></p>
+        <p>Icons: Drum Set, Keyboard, Bass Guitar, Violin, Amp, and Speaker by Janika Leisalu from the Noun Project; Controls from Google Material Icons</p>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\\/script>')</script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-    <!-- script.
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-    e.src='https://www.google-analytics.com/analytics.js';
-    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-    -->
   </body>
 </html>
