@@ -13,8 +13,8 @@
 		addEvent(videoWrappers[i], "click", toggleSingle);
 	}
 
-	// load the videos
-	checkLoad(videos);
+	addEvent(document.getElementById('start'), "click", start);
+	addEvent(document.getElementById('info'), "click", showOverlay);
 
 	// make sure the videos stay in sync by adjusting every 100 ms
 	setInterval(function () {
@@ -59,6 +59,7 @@
 
 
 
+
 	// returns an array of video DOM objects
 	function getArrayOfVideos() {
 		var videoElements = document.getElementsByClassName('music');
@@ -75,6 +76,20 @@
 			}
 			return a;
 		}
+	}
+
+	// starts everything with the click of a button
+	function start() {
+		hideOverlay();
+		checkLoad();
+	}
+
+	function hideOverlay() {
+		document.getElementsByClassName('overlay')[0].style.display = "none";
+	}
+
+	function showOverlay() {
+		document.getElementsByClassName('overlay')[0].style.display = "block";
 	}
 
 	// toggles a single video between muted and unmuted
@@ -180,8 +195,9 @@
 
 
 
-	// takes array of video objects
-	function checkLoad(videos) {
+	// checks whether all videos have loaded and starts all of them
+	function checkLoad() {
+		var videos = document.getElementsByClassName('music');
 		for (var i = 0; i < videos.length; i++) {
 			if (videos[i].readyState !== 4) {
 				setTimeout(function () {

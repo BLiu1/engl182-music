@@ -3,11 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
+    <title>Music Visualization Interactive</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis|Roboto+Condensed:400,400i">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
@@ -23,6 +24,15 @@
     -->
     <div class="content">
       <h1 class="container title">Music Visualization of TheFatRat's &ldquo;Monody&rdquo;</h1>
+      <div class="overlay">
+        <h1>Music Visualization Interactive</h1>
+        <p class="quote">&ldquo;Without music, life would be a mistake.&rdquo; &mdash; Friedrich Nietzsche</p>
+        <p>Often times, music can sound complex and hard to re-create, but really, a song is just a progression of a series of sounds. They gradually build on each other.</p>
+        <p>Try clicking around to toggle the individual parts and see how they interact with each other. Experiment with different combinations and take note of what effect one instrument may have on the overall sound.</p>
+        <p>If you're feeling stuck, try the buttons down below.</p>
+        <p>Have fun, and remember. Anyone can make music.</p>
+        <button id="start" type="button">Start</button>
+      </div>
       <div class="container music-viz">
         <div class="vid-wrapper">
           <video class="music" id="drums" src="video/drums.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
@@ -43,6 +53,12 @@
           </div>
         </div>
         <div class="vid-wrapper">
+          <video class="music" id="fx" src="video/fx.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover">
+            <h2 class="label">Sound Effects</h2>
+          </div>
+        </div>
+        <div class="vid-wrapper">
           <video class="music" id="chords1" src="video/chords1.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
           <div class="cover">
             <h2 class="label">Chords 1</h2>
@@ -54,12 +70,6 @@
             <h2 class="label">Chords 2</h2>
           </div>
         </div>
-        <div class="vid-wrapper">
-          <video class="music" id="fx" src="video/fx.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
-            <h2 class="label">Sound Effects</h2>
-          </div>
-        </div>
       </div>
       <div class="container controls">
         <button class="control" id="restartAll" type="button"><img src="img/restart.svg" alt="Skip to Start" title="Skip to Start"/></button>
@@ -69,10 +79,12 @@
         <button class="control" id="unmuteAll" type="button"><img src="img/unmute.svg" alt="Unmute All" title="Unmute All"/></button>
       </div>
       <div class="info">
+        <p><a id="info" href="javascript:void(0);">Intro Info</a></p>
         <p>Music: <a id="link" href="https://www.youtube.com/watch?v=B7xai5u_tnk" target="_blank">"Monody" by TheFatRat</a></p>
         <p>Icons: Drum Set, Keyboard, Bass Guitar, Violin, Amp, and Speaker by Janika Leisalu from the Noun Project; Controls from Google Material Icons</p>
       </div>
     </div>
+    <div class="preload"><img src="img/pause.svg"></div>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
   </body>
