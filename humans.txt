@@ -3,13 +3,18 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    Brian Liu -- Creator, Programmer -- http://bliu1.tk
 
 # THANKS
 
-    <name>
+    TheFatRat
+    Joanna Tan
+    Claire Seidler
+    Emily Ge
+    Greg Nelson
 
 # TECHNOLOGY COLOPHON
 
     CSS3, HTML5
-    Apache Server Configs, jQuery, Modernizr, Normalize.css
+    Apache Server Configs, Modernizr, Normalize.css
+    Videos created with Adobe After Effects CC
