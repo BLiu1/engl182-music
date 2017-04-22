@@ -9,10 +9,12 @@ html.no-js(lang='')
 		meta(name='viewport', content='width=device-width, initial-scale=1')
 		link(rel='apple-touch-icon', href='apple-touch-icon.png')
 		// Place favicon.ico in the root directory
-		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Dosis|Roboto+Condensed:400,400i')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Dosis:500|Roboto+Condensed:400,400i')
 		link(rel='stylesheet', href='css/normalize.css')
 		link(rel='stylesheet', href='css/main.css')
 		script(src='js/vendor/modernizr-2.8.3.min.js')
+		//- script(src='https://code.createjs.com/preloadjs-0.6.2.min.js')
+		script(src='js/vendor/keypress-2.1.4.min.js')
 	body
 		//if lt IE 8
 			p.browserupgrade
@@ -21,9 +23,9 @@ html.no-js(lang='')
 				|  browser. Please 
 				a(href='http://browsehappy.com/') upgrade your browser
 				|  to improve your experience.
-		div.content
-			h1.container.title Music Visualization of TheFatRat's &ldquo;Monody&rdquo;
-			div.overlay
+		div.content.firstToggle
+			//- h1.container.title TheFatRat&rsquo;s &ldquo;Monody&rdquo;
+			//- div.overlay
 				h1 Music Visualization Interactive
 				p.quote &ldquo;Without music, life would be a mistake.&rdquo; &mdash; Friedrich Nietzsche
 				p Often times, music can sound complex and hard to re-create, but really, a song is just a progression of a series of sounds. They gradually build on each other.
@@ -31,32 +33,36 @@ html.no-js(lang='')
 				p If you're feeling stuck, try the buttons down below.
 				p Have fun, and remember. Anyone can make music.
 				button#start(type="button") Start
-			div.container.music-viz
-				+vid-wrapper('drums', 'Drums')
-				+vid-wrapper('melodies', 'Melody')
-				+vid-wrapper('bass', 'Bass')
-				+vid-wrapper('fx', 'Sound Effects')
-				+vid-wrapper('chords1', 'Chords 1')
-				+vid-wrapper('chords2', 'Chords 2')
 			div.container.controls
 				+control-button("restartAll", "restart", "Skip to Start")
 				+control-button("togglePlayPause", "play", "Play")
 				+control-button("muteAll", "mute", "Mute All")
-				+control-button("toggleAll", "toggle", "Toggle All")
-				+control-button("unmuteAll", "unmute", "Unmute All")
+			div.container.music-viz
+				+vid-wrapper('drumbeat', 'Drums', true)
+				+vid-wrapper('melody', 'Melody')
+				+vid-wrapper('bassline', 'Bassline')
+				+vid-wrapper('background percussion', 'Background Percussion')
+				+vid-wrapper('chords1', 'Chords 1')
+				+vid-wrapper('chords2', 'Chords 2')
+			div.container.controls
+				button(type="button")#toggleAll.control Invert Tracks
+				//- +control-button("unmuteAll", "unmute", "Unmute All")
 			div.info
-				p
-					a#info(href="javascript:void(0);") Intro Info
+				h1 Easily perceive, explore, and appreciate the parts of a song by turning them on and off.
+				p Concept and Programming: Brian Liu
 				p Music: 
-					a#link(href="https://www.youtube.com/watch?v=B7xai5u_tnk", target="_blank") "Monody" by TheFatRat
-				p Icons: Drum Set, Keyboard, Bass Guitar, Violin, Amp, and Speaker by Janika Leisalu from the Noun Project; Controls from Google Material Icons
+					a#link(href="https://www.youtube.com/watch?v=B7xai5u_tnk", target="_blank") &ldquo;Monody&rdquo; by TheFatRat
+				p Icons: Google Material Icons and 
+					a(href="https://thenounproject.com/olenjansa/collection/band-equipment/", target="_blank") Band Equipment
+					|	Icons by Janika Leisalu from the Noun Project
+				p Special Thanks: Greg Nelson, Claire Seidler, Joanna Tan, Emily Ge, Steffen Riener
 		div.preload
 			img(src='img/pause.svg')
 		//- script(src='https://code.jquery.com/jquery-1.12.0.min.js')
 		//- script.
 		//-	 window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\\/script>')
 		script(src='js/plugins.js')
-		script(src='js/main.js')
+		script(src='js/min/main.min.js')
 		//- Google Analytics: change UA-XXXXX-X to be your site's ID.
 		//- script.
 			//- (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

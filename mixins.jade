@@ -1,10 +1,17 @@
 //- takes name, which is internal the id and name of the file,
 //- and label, which is the external facing label that goes on the cover div
-mixin vid-wrapper(name, label)
-	div.vid-wrapper
-		video.music(id=name src='video/'+name+'.mp4' type='video/mp4' preload='auto' mediaGroup='music')
-		div.cover
-			h2.label= label
+mixin vid-wrapper(name, label, tip)
+	if(tip)
+		div.vid-wrapper
+			video.music(id=name src='video/'+name+'.mp4' type='video/mp4' preload='auto' mediaGroup='music')
+			div.cover.cover-on.tooltip
+				span#tip Toggle Me!
+				h2.label= label
+	else
+		div.vid-wrapper
+			video.music(id=name src='video/'+name+'.mp4' type='video/mp4' preload='auto' mediaGroup='music')
+			div.cover.cover-on
+				h2.label= label
 
 mixin control-button(id, imgSrc, label)
 	button(id=id type="button").control

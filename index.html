@@ -8,10 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis|Roboto+Condensed:400,400i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis:500|Roboto+Condensed:400,400i">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/vendor/keypress-2.1.4.min.js"></script>
   </head>
   <body>
     <!--if lt IE 8
@@ -22,70 +23,63 @@
     	a(href='http://browsehappy.com/') upgrade your browser
     	|  to improve your experience.
     -->
-    <div class="content">
-      <h1 class="container title">Music Visualization of TheFatRat's &ldquo;Monody&rdquo;</h1>
-      <div class="overlay">
-        <h1>Music Visualization Interactive</h1>
-        <p class="quote">&ldquo;Without music, life would be a mistake.&rdquo; &mdash; Friedrich Nietzsche</p>
-        <p>Often times, music can sound complex and hard to re-create, but really, a song is just a progression of a series of sounds. They gradually build on each other.</p>
-        <p>Try clicking around to toggle the individual parts and see how they interact with each other. Experiment with different combinations and take note of what effect one instrument may have on the overall sound.</p>
-        <p>If you're feeling stuck, try the buttons down below.</p>
-        <p>Have fun, and remember. Anyone can make music.</p>
-        <button id="start" type="button">Start</button>
+    <div class="content firstToggle">
+      <div class="container controls">
+        <button class="control" id="restartAll" type="button"><img src="img/restart.svg" alt="Skip to Start" title="Skip to Start"/></button>
+        <button class="control" id="togglePlayPause" type="button"><img src="img/play.svg" alt="Play" title="Play"/></button>
+        <button class="control" id="muteAll" type="button"><img src="img/mute.svg" alt="Mute All" title="Mute All"/></button>
       </div>
       <div class="container music-viz">
         <div class="vid-wrapper">
-          <video class="music" id="drums" src="video/drums.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
+          <video class="music" id="drumbeat" src="video/drumbeat.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover cover-on tooltip"><span id="tip">Toggle Me!</span>
             <h2 class="label">Drums</h2>
           </div>
         </div>
         <div class="vid-wrapper">
-          <video class="music" id="melodies" src="video/melodies.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
+          <video class="music" id="melody" src="video/melody.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover cover-on">
             <h2 class="label">Melody</h2>
           </div>
         </div>
         <div class="vid-wrapper">
-          <video class="music" id="bass" src="video/bass.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
-            <h2 class="label">Bass</h2>
+          <video class="music" id="bassline" src="video/bassline.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover cover-on">
+            <h2 class="label">Bassline</h2>
           </div>
         </div>
         <div class="vid-wrapper">
-          <video class="music" id="fx" src="video/fx.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
-            <h2 class="label">Sound Effects</h2>
+          <video class="music" id="background percussion" src="video/background percussion.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
+          <div class="cover cover-on">
+            <h2 class="label">Background Percussion</h2>
           </div>
         </div>
         <div class="vid-wrapper">
           <video class="music" id="chords1" src="video/chords1.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
+          <div class="cover cover-on">
             <h2 class="label">Chords 1</h2>
           </div>
         </div>
         <div class="vid-wrapper">
           <video class="music" id="chords2" src="video/chords2.mp4" type="video/mp4" preload="auto" mediaGroup="music"></video>
-          <div class="cover">
+          <div class="cover cover-on">
             <h2 class="label">Chords 2</h2>
           </div>
         </div>
       </div>
       <div class="container controls">
-        <button class="control" id="restartAll" type="button"><img src="img/restart.svg" alt="Skip to Start" title="Skip to Start"/></button>
-        <button class="control" id="togglePlayPause" type="button"><img src="img/play.svg" alt="Play" title="Play"/></button>
-        <button class="control" id="muteAll" type="button"><img src="img/mute.svg" alt="Mute All" title="Mute All"/></button>
-        <button class="control" id="toggleAll" type="button"><img src="img/toggle.svg" alt="Toggle All" title="Toggle All"/></button>
-        <button class="control" id="unmuteAll" type="button"><img src="img/unmute.svg" alt="Unmute All" title="Unmute All"/></button>
+        <button class="control" type="button" id="toggleAll">Invert Tracks</button>
       </div>
       <div class="info">
-        <p><a id="info" href="javascript:void(0);">Intro Info</a></p>
-        <p>Music: <a id="link" href="https://www.youtube.com/watch?v=B7xai5u_tnk" target="_blank">"Monody" by TheFatRat</a></p>
-        <p>Icons: Drum Set, Keyboard, Bass Guitar, Violin, Amp, and Speaker by Janika Leisalu from the Noun Project; Controls from Google Material Icons</p>
+        <h1>Easily perceive, explore, and appreciate the parts of a song by turning them on and off.</h1>
+        <p>Concept and Programming: Brian Liu</p>
+        <p>Music: <a id="link" href="https://www.youtube.com/watch?v=B7xai5u_tnk" target="_blank">&ldquo;Monody&rdquo; by TheFatRat</a></p>
+        <p>Icons: Google Material Icons and <a href="https://thenounproject.com/olenjansa/collection/band-equipment/" target="_blank">Band Equipment</a>	Icons by Janika Leisalu from the Noun Project</p>
+        <p>Special Thanks: Greg Nelson, Claire Seidler, Joanna Tan, Emily Ge, Steffen Riener</p>
       </div>
     </div>
     <div class="preload"><img src="img/pause.svg"></div>
     <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/min/main.min.js"></script>
   </body>
 </html>

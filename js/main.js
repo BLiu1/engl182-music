@@ -7,14 +7,7 @@
 
 	var videos = getArrayOfVideos();
 	var videoWrappers = document.getElementsByClassName('vid-wrapper');
-
-	//  gives mute/unmute behavior to videoWrappers
-	for (var i = 0; i < videoWrappers.length; i++) {
-		addEvent(videoWrappers[i], "click", toggleSingle);
-	}
-
-	addEvent(document.getElementById('start'), "click", start);
-	addEvent(document.getElementById('info'), "click", showOverlay);
+	window.firstToggle = false; // GLOBAL VAR
 
 	// make sure the videos stay in sync by adjusting every 100 ms
 	setInterval(function () {
@@ -30,6 +23,14 @@
 		togglePlayPause(e, true);
 	});
 
+	/******************************************/
+	/* Click Listeners */
+
+	// gives mute/unmute behavior to videoWrappers
+	for (var i = 0; i < videoWrappers.length; i++) {
+		addEvent(videoWrappers[i], "click", toggleSingle);
+	}
+
 	// stop focusing once clicked
 	var buttons = document.getElementsByClassName('control');
 	for (var i = 0; i < buttons.length; i++) {
@@ -38,27 +39,30 @@
 		})
 	}
 
-	// toggles playing and pausing all videos
+	/* Controls */
 	addEvent(document.getElementById('togglePlayPause'), "click", togglePlayPause);
-
-	// puts all of the videos at the start
 	addEvent(document.getElementById('restartAll'), "click", restartAll);
-
-	// mutes all of the videos
 	addEvent(document.getElementById('muteAll'), "click", muteAll);
-
-	// unmutes all of the videos
-	addEvent(document.getElementById('unmuteAll'), "click", unmuteAll);
-
-	// toggles all of the videos
 	addEvent(document.getElementById('toggleAll'), "click", toggleAll);
 
+	/******************************************/
+	/* Keyboard Input Listener */
+	var keyListener = new window.keypress.Listener();
+	keyListener.simple_combo("space", togglePlayPause);
+	keyListener.simple_combo("p", togglePlayPause);
+	keyListener.simple_combo("enter", restartAll);
+	keyListener.simple_combo("r", restartAll);
+	keyListener.simple_combo("m", muteAll);
+	keyListener.simple_combo("s", toggleAll);
+	keyListener.simple_combo("t", toggleAll);
+	keyListener.simple_combo("i", toggleAll);
+
+	/******************************************/
+
+	muteAll();
 
 
-
-
-
-
+	/******************************************/
 
 	// returns an array of video DOM objects
 	function getArrayOfVideos() {
@@ -78,20 +82,6 @@
 		}
 	}
 
-	// starts everything with the click of a button
-	function start() {
-		hideOverlay();
-		checkLoad();
-	}
-
-	function hideOverlay() {
-		document.getElementsByClassName('overlay')[0].style.display = "none";
-	}
-
-	function showOverlay() {
-		document.getElementsByClassName('overlay')[0].style.display = "block";
-	}
-
 	// toggles a single video between muted and unmuted
 	// called by click eventListener from individual videoWrapper
 	// if an element is passed in, it will use that as the videoWrapper
@@ -104,8 +94,23 @@
 
 		// get the cover div
 		var cover = self.children[1];
-		// toggles whether it's on top of the video
-		cover.style.zIndex = (cover.style.zIndex == 2) ? 0 : 2;
+		// toggles whether it's "focused"
+		cover.classList.toggle("cover-on");
+		cover.classList.toggle("cover-off");
+
+		// handle tooltip first case
+		if (!window.firstToggle) {
+			document.getElementsByClassName("content")[0].classList.remove("firstToggle");
+			var child = document.getElementById("tip");
+			child.parentNode.removeChild(child);
+			// play all
+			var videoElements = document.getElementsByClassName('music');
+			for (var i = 0; i < videoElements.length; i++) {
+				videoElements[i].play();
+			}
+			checkPaused();
+		}
+		window.firstToggle = true;
 	}
 
 	// toggles all videos to their opposites (muted to unmuted and vice versa)
@@ -125,19 +130,9 @@
 			// mute video object
 			videoWrappers[i].children[0].muted = true;
 			// put cover div on top
-			videoWrappers[i].children[1].style.zIndex = 2;
-		}
-	}
-
-	// unmutes all videos
-	// called by click eventListener from control button
-	function unmuteAll() {
-		var videoWrappers = document.getElementsByClassName('vid-wrapper');
-		for (var i = 0; i < videoWrappers.length; i++) {
-			// mute video object
-			videoWrappers[i].children[0].muted = false;
-			// put cover div on top
-			videoWrappers[i].children[1].style.zIndex = 0;
+			var cover = videoWrappers[i].children[1];
+			cover.classList.add("cover-on");
+			cover.classList.remove("cover-off");
 		}
 	}
 
@@ -200,9 +195,7 @@
 		var videos = document.getElementsByClassName('music');
 		for (var i = 0; i < videos.length; i++) {
 			if (videos[i].readyState !== 4) {
-				setTimeout(function () {
-					checkLoad(videos);
-				}, 100);
+				setTimeout(checkLoad, 100);
 				return;
 			}
 		}
@@ -221,7 +214,7 @@
 	// takes a video object and an array of video objects
 	// syncs the rest of the videos to the first by adjusting playback speeds
 	function syncVideos(_masterPlayer, _slavePlayers) {
-		var maxTimeDiff = 5; // seconds
+		var maxTimeDiff = 0.5; // seconds
 		var adjustmentSensitivity = 2;
 		var slowestPlaybackSpeed = 0;
 		var fastestPlaybackSpeed = 10.00;
@@ -253,18 +246,6 @@
 			_slavePlayers[i].playbackRate = compensatingFrameRate;
 		}
 	}
-
-	// didn't work - stutters
-	/*function syncVideos(firstVideo, otherVideos) {
-		var firstTimeStamp, secondTimeStamp;
-		for (var i = 0; i < otherVideos.length; i++) {
-			firstTimeStamp = firstVideo.currentTime;
-			secondTimeStamp = otherVideos[i].currentTime;
-			if (Math.abs(secondTimeStamp - firstTimeStamp) > 0.1){
-				videos[i].currentTime = firstTimeStamp;
-			}
-		}
-	}*/
 
 	// manually makes all the videos loop in sync
 	// called by timeupdate eventListener on first video
