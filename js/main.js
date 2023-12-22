@@ -216,7 +216,7 @@
 	function syncVideos(_masterPlayer, _slavePlayers) {
 		var maxTimeDiff = 0.5; // seconds
 		var adjustmentSensitivity = 2;
-		var slowestPlaybackSpeed = 0;
+		var slowestPlaybackSpeed = 0.1;
 		var fastestPlaybackSpeed = 10.00;
 		// Code adapted from this comment http://disq.us/p/th4uhk
 		//   on https://bocoup.com/blog/html5-video-synchronizing-playback-of-two-videos/
@@ -237,7 +237,7 @@
 						)
 						, fastestPlaybackSpeed
 					)
-				).toFixed(2);
+				).toFixed(3);
 
 			if (compensatingFrameRate > .99 && compensatingFrameRate < 1.01) {
 				compensatingFrameRate = 1.00;
